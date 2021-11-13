@@ -1,8 +1,8 @@
 ## ATT13.11.21
 
-```
+
 Corrigido bug onde o sistema não completava a edição dos dados: A não atualização dos dados era devido o submit do formulário, onde antes de o servidor do banco de dados receber os dados atualizados, a página era reiniciada devido o submit, mudei o comportamento da função responsável pela atualização e com isso foi resolvido o segundo comportamento que era recarregar toda a página, agora o sistema faz um redirecionamento que só carrega os dados alterados da api sem ser necessário fazer o reload da página.
-```
+
 
 # desafio-sharenergy-2021-22
 
