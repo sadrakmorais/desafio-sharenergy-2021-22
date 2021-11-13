@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Edit from '@material-ui/icons/Edit';
 import Snackbar from '@mui/material/Snackbar';
@@ -44,6 +45,7 @@ const ClientCard = ({ event }) => {
 	const [name, setName] = useState('');
 	const [participation, setParticipation] = useState('');
 	const [clients, setClients] = useState([]);
+	const history = useHistory();
 
 	const totalParticipations = clients.map((e) => e.participation);
 
@@ -77,9 +79,10 @@ const ClientCard = ({ event }) => {
 	}
 
 	const handleModalClient = async () => {
-		setOpenM(true);
-		setName(event.name);
-		console.log(event.participation + maxParticiparion(isValidTotal));
+		setTimeout(() => {
+			setOpenM(true);
+			setName(event.name);
+		}, 200);
 	};
 
 	const handleEditionClient = async () => {
@@ -97,13 +100,16 @@ const ClientCard = ({ event }) => {
 				return alert('Preencha todos os campos corretamente');
 			}
 		}
-		window.location.reload();
+		setTimeout(() => {
+			setOpenM(false);
+			history.push('/home');
+			history.push('/clientes');
+		}, 300);
 	};
+
 	const handleDelete = async () => {
 		try {
-			const {
-				data: { event: newEvent },
-			} = await DELETE(`/users/${event._id}`);
+			await DELETE(`/users/${event._id}`);
 			setOpen(true);
 		} catch (error) {
 			console.log(error);
@@ -119,7 +125,6 @@ const ClientCard = ({ event }) => {
 		if (reason === 'clickaway') {
 			return;
 		}
-
 		setOpen(false);
 	};
 
@@ -140,7 +145,7 @@ const ClientCard = ({ event }) => {
 				</div>
 				<Snackbar
 					open={open}
-					autoHideDuration={6000}
+					autoHideDuration={2000}
 					onClose={handleClose}
 					message='Usuário Deletado'
 				/>
@@ -159,7 +164,7 @@ const ClientCard = ({ event }) => {
 					<Box sx={style}>
 						<FormContainer>
 							<h1>Alteração de Dados</h1>
-							<Form onSubmit={handleEditionClient}>
+							<Form>
 								<Input
 									label='Novo nome'
 									value={name}
@@ -173,7 +178,7 @@ const ClientCard = ({ event }) => {
 									onChange={(event) =>
 										setParticipation(event.target.value)
 									}></Input>
-								<Button type='submit' variant='contained'>
+								<Button onClick={handleEditionClient} variant='contained'>
 									Alterar
 								</Button>
 							</Form>
